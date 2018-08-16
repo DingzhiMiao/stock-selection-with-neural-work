@@ -48,7 +48,7 @@ def create_dataset(i_month, retlabel = 'rel_ret'):
         data was saved in dataset/(test|train)_stock_month_(n)_(retlabel).h5
     """
     
-    if os.path.exists("datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5"):
+    if os.path.exists("../old/datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5"):
         raw_input_A = input("dataset already exist, want to recreate? (y/n)")
         if raw_input_A == "n":
             return
@@ -56,7 +56,7 @@ def create_dataset(i_month, retlabel = 'rel_ret'):
     
     # Get excel data and process the ret
     #   Rule: +30% = 1; -30% = 0
-    fname = "pic/month_%d/data/retinfo_%d.xlsx" % (i_month, i_month)
+    fname = "../old/pic/month_%d/data/retinfo_%d.xlsx" % (i_month, i_month)
     df = pd.read_excel(fname)
     
     # exclude useless data
@@ -92,7 +92,7 @@ def create_dataset(i_month, retlabel = 'rel_ret'):
     # create test img and train img
     initialize = False
     for i_stock in test_stock:
-        fname = "pic/month_%d/img/img_%d_%d.png" % (i_month, i_month, i_stock)
+        fname = "../old/pic/month_%d/img/img_%d_%d.png" % (i_month, i_month, i_stock)
         image = np.array(Image.open(fname))
         if initialize:
             im_test = np.concatenate((im_test, image), axis = 0)
@@ -103,7 +103,7 @@ def create_dataset(i_month, retlabel = 'rel_ret'):
     
     initialize = False
     for i_stock in train_stock:
-        fname = "pic/month_%d/img/img_%d_%d.png" % (i_month, i_month, i_stock)
+        fname = "../old/pic/month_%d/img/img_%d_%d.png" % (i_month, i_month, i_stock)
         image = np.array(Image.open(fname))
         if initialize:
             im_train = np.concatenate((im_train, image), axis = 0)
@@ -115,13 +115,13 @@ def create_dataset(i_month, retlabel = 'rel_ret'):
     mkdir('datasets')
     
     # create h5 file
-    h5file = h5py.File("datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "w")
+    h5file = h5py.File("../old/datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "w")
     h5file.create_dataset("train_set_x", data = im_train)
     h5file.create_dataset("train_set_y", data = train_label)
     h5file.create_dataset("stock_name", data = train_stock)
     h5file.close()
     
-    h5file = h5py.File("datasets/test_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "w")
+    h5file = h5py.File("../old/datasets/test_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "w")
     h5file.create_dataset("test_set_x", data = im_test)
     h5file.create_dataset("test_set_y", data = test_label)
     h5file.create_dataset("stock_name", data = test_stock)
@@ -130,12 +130,12 @@ def create_dataset(i_month, retlabel = 'rel_ret'):
     print("Month %d data using label %s is save in datasets/ directory, please load" % (i_month, retlabel))
     
 def load_dataset(i_month, retlabel = 'rel_ret'):
-    train_dataset = h5py.File("datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "r")
+    train_dataset = h5py.File("../old/datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "r")
     train_set_x_orig = np.array(train_dataset["train_set_x"][:]) # your train set features
     train_set_y_orig = np.array(train_dataset["train_set_y"][:]) # your train set labels
     train_set_stock = np.array(train_dataset["stock_name"][:])
 
-    test_dataset = h5py.File("datasets/test_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "r")
+    test_dataset = h5py.File("../old/datasets/test_stock_month_"+str(i_month)+"_"+ retlabel +".h5", "r")
     test_set_x_orig = np.array(test_dataset["test_set_x"][:]) # your test set features
     test_set_y_orig = np.array(test_dataset["test_set_y"][:]) # your test set labels
     test_set_stock = np.array(test_dataset["stock_name"][:])

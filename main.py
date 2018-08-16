@@ -13,8 +13,8 @@ import os
 start_month = 83
 end_month = 83
 
-for end_month in np.arange(100, 113):
-    for start_month in np.arange(end_month, end_month-13, -3):
+for end_month in np.arange(102, 150):
+    for start_month in np.arange(end_month, end_month-4, -3):
         retlabel = 'rel_ret'
         initialize = False
         
@@ -23,7 +23,7 @@ for end_month in np.arange(100, 113):
         for i_month in range(start_month, end_month + 1):
             # create and loading the dataset
             
-            if not os.path.exists("datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5"):
+            if not os.path.exists("../old/datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5"):
                 create_dataset(i_month, retlabel)
             train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, train_set_stock, test_set_stock = load_dataset(i_month, retlabel)
             
@@ -53,14 +53,21 @@ for end_month in np.arange(100, 113):
         mkdir('log')
         
         loginfo(train_label, "Number of examples in training set: %d" % (train_set_x.shape[1]))
+        lrate = 0.0005
+        mnbs = 32
+        be = 0.01
+        loginfo(train_label, "Training Parameters: " )
+        loginfo(train_label, "Learning rate: %f  minibatch: %d  regularization: %f" % (lrate, mnbs, be))
         
-        parameters = model(train_label, train_set_x, train_set_y, test_set_x, test_set_y, learning_rate= 0.0001)
+        parameters = model(train_label, train_set_x, train_set_y, test_set_x, test_set_y, learning_rate= lrate, minibatch_size = mnbs, beta = be)
+        
+        
         
         loginfo(train_label, "Train on %s Month Data, test behavior of next 3 month:" % (train_label))
         
         for i_month in range(end_month+1, end_month+4):
             
-            if not os.path.exists("datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5"):
+            if not os.path.exists("../old/datasets/train_stock_month_"+str(i_month)+"_"+ retlabel +".h5"):
                 create_dataset(i_month, retlabel)
             train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, train_set_stock, test_set_stock = load_dataset(i_month)
             
