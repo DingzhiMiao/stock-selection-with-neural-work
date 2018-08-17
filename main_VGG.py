@@ -60,6 +60,9 @@ for end_month in np.arange(102, 150):
         # output to log and screen
         mkdir('log_VGG')
         
+        train_set_y = train_set_y.T
+        test_set_y = test_set_y.T
+        
         loginfo(train_label, "Number of examples in training set: %d" % (train_set_x.shape[1]))
         lrate = 0.0005
         mnbs = 32
@@ -68,7 +71,7 @@ for end_month in np.arange(102, 150):
         loginfo(train_label, "Learning rate: %f  minibatch: %d  regularization: %f" % (lrate, mnbs, be))
         
         VGGModel = VGG16_Model(train_set_x[0].shape)
-        VGGModel.compile(optimizer="adam", loss = "binary_crossentrophy", metrics = ["accuracy"])
+        VGGModel.compile(optimizer="adam", loss = "binary_crossentropy", metrics = ["accuracy"])
         VGGModel.fit(x = train_set_x, y = train_set_y, epochs = 2, batch_size= mnbs)
         
         loginfo(train_label, "Train on %s Month Data, test behavior of next month:" % (train_label))
