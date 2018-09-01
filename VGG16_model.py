@@ -2,7 +2,7 @@
 """
 Created on Thu Aug 16 18:19:21 2018
 
-@author: Yulab
+@author: Dingzhi Hu
 """
 
 import numpy as np

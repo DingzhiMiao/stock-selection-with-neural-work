@@ -2,7 +2,7 @@
 """
 Created on Fri Aug 17 07:52:36 2018
 
-@author: Yulab
+@author: Dingzhi Hu
 """
 
 import numpy as np
@@ -85,10 +85,8 @@ for end_month in np.arange(102, 150):
             All_test_x_orig = np.concatenate((train_set_x_orig, test_set_x_orig), axis = 0)
             All_test_y_orig = np.concatenate((train_set_y_orig, test_set_y_orig), axis = 1)
             
-            All_test_x_flatten = All_test_x_orig.reshape(All_test_x_orig.shape[0], -1).T
-            
-            All_test_x = All_test_x_flatten/255
-            All_test_y = All_test_y_orig
+            All_test_x = All_test_x_orig/255
+            All_test_y = All_test_y_orig.T
             
             preds = VGGModel.evaluate(x=All_test_x, y = All_test_y)
             thisAccuracy = preds[1]
